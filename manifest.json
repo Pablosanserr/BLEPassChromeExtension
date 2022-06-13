@@ -1,0 +1,22 @@
+{
+    "name": "Web-Bluetooth Hardware Password Manager",
+    "description": "Communicate with the device via Bluetooth to store or autofill your passwords",
+    "version": "1.0.0",
+    "manifest_version": 3,
+    "permissions": ["storage", "activeTab", "scripting"],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "128": "/images/icon.png"
+          }
+    },
+    "icons": {
+      "128": "/images/icon.png"
+    },
+    "content_scripts": [{
+      "all_frames": true,
+      "js": ["content_script.js"],
+      "matches": ["https://*/*"],
+      "run_at": "document_idle"      
+    }]
+}
