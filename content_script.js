@@ -280,6 +280,7 @@ login_button.style.margin = '0 5px';
 login_button.style.width = 'fit-content';
 login_button.style.padding = '0 10px';
 login_button.style.fontSize = '13.33px';
+login_button.style.fontFamily = "Arial, Helvetica, sans-serif";
 
 // Register button configuration
 register_button.innerHTML = "Store";
@@ -288,6 +289,7 @@ register_button.style.margin = '0 5px';
 register_button.style.width = 'fit-content';
 register_button.style.padding = '0 10px';
 register_button.style.fontSize = '13.33px';
+register_button.style.fontFamily = "Arial, Helvetica, sans-serif";
 
 // Generate password button configuration
 generate_pwd_button.innerHTML = "Generate";
@@ -296,6 +298,7 @@ generate_pwd_button.style.margin = '0px 5px';
 generate_pwd_button.style.width = 'fit-content';
 generate_pwd_button.style.padding = '0 10px';
 generate_pwd_button.style.fontSize = '13.33px';
+generate_pwd_button.style.fontFamily = "Arial, Helvetica, sans-serif";
 
 popupText.id = "generatePasswordPopUp";
 popupText.classList.add('popupText');
