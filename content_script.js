@@ -89,15 +89,17 @@ function wb_sendMessage(url, user, pwd){
 }
 
 function wb_sendPackets(characteristic, packets, packetNumber){
-    characteristic.writeValue(JSONToArray(packets[packetNumber]))
-    .then( _ =>{
-        if(packetNumber < packets.length){
-            wb_sendPackets(characteristic, packets, packetNumber + 1)
-        }else{
-            console.log("Message sent")
-        }
-    })
-    .catch(error => {console.log("Send packet error: " + error)})
+    if(packets[packetNumber] != null){
+        characteristic.writeValue(JSONToArray(packets[packetNumber]))
+        .then( _ =>{
+            if(packetNumber < packets.length){
+                wb_sendPackets(characteristic, packets, packetNumber + 1)
+            }else{
+                console.log("Message sent")
+            }
+        })
+        .catch(error => {console.log("Send packet error: " + error)})
+    }
 }
 
 function wb_receiveNotification(event){
@@ -108,16 +110,19 @@ function wb_receiveNotification(event){
     const valueReceived = event.target.value;
     const value = encoder.decode(valueReceived);
 
-    console.log("Received: " + value);
+    //console.log("Received: " + value);
     const response = JSON.parse(value)
     if(response.hasOwnProperty('err')){
         console.log('Error: ' + response['err']);
-    }if(response.hasOwnProperty('pwd')){
-        console.log("Typing value in the password input field...")
+        if(response['err'] == 'ok') alert('Password successfully stored')
+        else alert('Error: ' + response['err'])
+    }else if(response.hasOwnProperty('pwd')){
+        //console.log("Typing value in the password input field...")
         var inputs = document.querySelectorAll('input[type=password]')
         inputs.forEach(i =>{
             i.value=response["pwd"];
         });
+        console.log("Received password from " + deviceName)
     }else{
         console.log("Unknown message received")
     }
@@ -149,8 +154,6 @@ function JSONToArray(jsonText){
     
     var enc = new TextEncoder()
     var r = enc.encode(jsonText)
-    console.log("long info codificada: " + r.length)
-    console.log("info codificada:\n" + jsonText);
     return r
 }
 
@@ -206,9 +209,6 @@ function generatePassword(){
         tmp_pwd_size--;
         charList = charList.concat(sy_list)
     }
-    console.log("tmp_pwd_size: " + tmp_pwd_size);
-    console.log("pwd_size: " + pwd_size)
-    console.log(charList)
 
     if(tmp_pwd_size < 0){
         console.log("Password length must be longer")
@@ -246,7 +246,8 @@ function generatePassword(){
     }
 
     /* Write password into input type password */
-    console.log("Generated password: " + pwd);
+    //console.log("Generated password: " + pwd);
+    console.log("Password successfully generated")
     var inputs = document.querySelectorAll('input[type=password]')
     inputs.forEach(i =>{
         i.value=pwd;
@@ -273,19 +274,28 @@ username_form.style.display = 'inline';
 username_form.style.margin = '0 5px';
 
 // Login button configuration
-login_button.innerHTML = "Autofill the password";
+login_button.innerHTML = "Autofill";
 login_button.onclick = wb_login;
 login_button.style.margin = '0 5px';
+login_button.style.width = 'fit-content';
+login_button.style.padding = '0 10px';
+login_button.style.fontSize = '13.33px';
 
 // Register button configuration
-register_button.innerHTML = "Register the password";
+register_button.innerHTML = "Store";
 register_button.onclick = wb_register;
 register_button.style.margin = '0 5px';
+register_button.style.width = 'fit-content';
+register_button.style.padding = '0 10px';
+register_button.style.fontSize = '13.33px';
 
 // Generate password button configuration
-generate_pwd_button.innerHTML = "Generate password";
+generate_pwd_button.innerHTML = "Generate";
 generate_pwd_button.onclick = togglePopUp;
 generate_pwd_button.style.margin = '0px 5px';
+generate_pwd_button.style.width = 'fit-content';
+generate_pwd_button.style.padding = '0 10px';
+generate_pwd_button.style.fontSize = '13.33px';
 
 popupText.id = "generatePasswordPopUp";
 popupText.classList.add('popupText');
@@ -370,6 +380,8 @@ bar.style.textAlign = "center";
 bar.style.width = "100%";
 bar.style.backgroundColor = document.body.backgroundColor;
 bar.style.padding = "3px";
+bar.style.fontFamily = "Arial, Helvetica, sans-serif";
+bar.style.fontSize = "14px";
 
 // Append elements to webpage
 bar.appendChild(username_form);
